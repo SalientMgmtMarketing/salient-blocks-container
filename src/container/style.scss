@@ -1,0 +1,49 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.wp-block-salient-block-salient-container  {
+  background-size: cover;
+  position: relative;
+
+  .wrapper {
+    display: block;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+  * {
+    position: relative;
+    z-index: 10;
+  }
+}
+.add-button {
+  background-color: green;
+  color: white;
+  transition: 250ms;
+  &:hover, &:active {
+    background-color: darkgreen;
+    color: white;
+  }
+}
+.remove-button {
+  background-color: red;
+  color: white;
+  margin: 2em 0;
+  transition: 250ms;
+  &:hover, &:active {
+    background-color: darkred;
+    color: white;
+  }
+}
