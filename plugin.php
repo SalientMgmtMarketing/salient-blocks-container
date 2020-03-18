@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: salient-blocks-container — CGB Gutenberg Block Plugin
+ * Plugin Name: Salient Blocks: Container
  * Plugin URI: https://github.com/ahmadawais/create-guten-block/
  * Description: salient-blocks-container — is a Gutenberg plugin created via create-guten-block.
- * Author: mrahmadawais, maedahbatool
- * Author URI: https://AhmadAwais.com/
+ * Author: Paul Stonier
+ * Author URI: https://www.salient.com/
  * Version: 1.0.0
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
@@ -23,19 +23,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once plugin_dir_path( __FILE__ ) . 'src/init.php';
 
 // Add Custom Block Category.
-add_filter( 'block_categories', function ( $categories, $post ) {
+add_filter(
+	'block_categories',
+	function ( $categories, $post ) {
 
-	$new_categories = array_merge(
-		$categories,
-		array(
+		$new_categories = array_merge(
+			$categories,
 			array(
-				'slug'  => 'salient',
-				'title' => __( 'Salient', 'salient-blocks' ),
-			),
-		)
-	);
+				array(
+					'slug'  => 'salient',
+					'title' => __( 'Salient', 'salient-blocks' ),
+				),
+			)
+		);
 
-	$filtered_categories = array_unique( $new_categories, SORT_REGULAR );
+		$filtered_categories = array_unique( $new_categories, SORT_REGULAR );
 
-	return $filtered_categories;
-}, 10, 2);
+		return $filtered_categories;
+
+	},
+	10,
+	2
+);

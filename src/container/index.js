@@ -12,21 +12,15 @@ import './style.scss';
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType, createBlock } = wp.blocks; // Import registerBlockType() from wp.blocks
 const {
-	RichText,
-	AlignmentToolbar,
 	MediaUpload,
-	BlockControls,
 	InspectorControls,
 	ColorPalette,
-	URLInput,
-	getColorObjectByColorValue,
 	ContrastChecker,
 	InnerBlocks,
 } = wp.blockEditor;
 const {
 	Button,
 	PanelBody,
-	PanelRow,
 	SelectControl,
 	RangeControl,
 } = wp.components;
@@ -53,16 +47,20 @@ registerBlockType( 'salient/block-salient-container', {
 	keywords: [
 		__( 'container' ),
 		__( 'box' ),
-		__( 'grist' ),
+		__( 'salient' ),
 	],
 	attributes: {
 		paddingTop: {
 			type: 'number',
-			default: 10,
+			default: 40,
 		},
 		paddingBottom: {
 			type: 'number',
-			default: 10,
+			default: 40,
+		},
+		paddingUnits: {
+			type: 'string',
+			default: 'px',
 		},
 		backgroundColor: {
 			type: 'string',
@@ -86,9 +84,17 @@ registerBlockType( 'salient/block-salient-container', {
 			type: 'number',
 			default: 50,
 		},
-		overlayBgColor: { 
+		overlayBgColor: {
 			type: 'string',
 			default: '#333',
+		},
+		isVideoBg: {
+			type: 'boolean',
+			default: false,
+		},
+		bgMediaType: {
+			type: 'string',
+			default: 'image',
 		},
 	},
 	supports: {
@@ -110,10 +116,12 @@ registerBlockType( 'salient/block-salient-container', {
 		const {
 			paddingTop,
 			paddingBottom,
+			paddingUnits,
 			textColor,
 			backgroundColor,
 			backgroundImage,
 			bgImagePosition,
+			bgMediaType,
 			overlayBgColor,
 			overlayOpacity,
 		} = attributes;
@@ -121,9 +129,10 @@ registerBlockType( 'salient/block-salient-container', {
 		const TEMPLATE = [ [ 'core/heading' ], [ 'core/paragraph' ] ];
 
 		function onChangeBgImage( newBgImage ) {
-			console.log( newBgImage );
 			setAttributes( { backgroundImage: newBgImage } );
+			setAttributes( { bgMediaType: newBgImage.type } );
 		}
+
 		function removeBgImage( ) {
 			setAttributes( { backgroundImage: '' } );
 		}
@@ -138,9 +147,14 @@ registerBlockType( 'salient/block-salient-container', {
 							onChange={ ( newBgColor ) => setAttributes( { backgroundColor: newBgColor } ) }
 							disableCustomColors={ true }
 						></ColorPalette>
+						<ContrastChecker
+							backgroundColor={ backgroundColor }
+							textColor={ textColor }
+							isLargeText={ false }
+						/>
 						<MediaUpload
 							value={ backgroundImage }
-							onSelect={ ( newBgImage ) => setAttributes( { backgroundImage: newBgImage } ) }
+							onSelect={ onChangeBgImage }
 							render={ ( { open } ) => (
 								<Button
 									className="add-button"
@@ -151,12 +165,33 @@ registerBlockType( 'salient/block-salient-container', {
 							) }
 						/>
 						{ backgroundImage ? (
-							<Button
-								className="remove-button"
-								onClick={ removeBgImage }
-							>
-								Remove Background Image
-							</Button>
+							<Fragment>
+								<div className="image-preview-wrapper">
+									{ backgroundImage.type === 'video' && (
+										<video
+											className="image-preview"
+											autoPlay
+											muted
+											loop
+											src={ backgroundImage.url }
+										/>
+									) }
+									{ backgroundImage.type === 'image' && (
+										/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */
+										<img
+											className="image-preview"
+											src={ backgroundImage.url }
+											alt={ __( 'preview' ) }
+										/>
+									) }
+								</div>
+								<Button
+									className="remove-button"
+									onClick={ removeBgImage }
+								>
+									Remove Background Image
+								</Button>
+							</Fragment>
 						) : '' }
 						{ backgroundImage ? (
 							<Fragment>
@@ -181,7 +216,7 @@ registerBlockType( 'salient/block-salient-container', {
 								<h3>Background Overlay</h3>
 								<ColorPalette
 									value={ overlayBgColor }
-									onChange={ ( newBgColor ) => setAttributes( { overlayBgColor : newBgColor } ) }
+									onChange={ ( newBgColor ) => setAttributes( { overlayBgColor: newBgColor } ) }
 									disableCustomColors={ true }
 								></ColorPalette>
 								<RangeControl
@@ -195,7 +230,18 @@ registerBlockType( 'salient/block-salient-container', {
 								/>
 							</Fragment>
 						) : '' }
-						
+					</PanelBody>
+					<PanelBody title={ __( 'Text' ) } >
+						<ColorPalette
+							value={ textColor }
+							onChange={ ( newTextColor ) => setAttributes( { textColor: newTextColor } ) }
+							disableCustomColors={ true }
+						></ColorPalette>
+						<ContrastChecker
+							backgroundColor={ backgroundColor }
+							textColor={ textColor }
+							isLargeText={ false }
+						/>
 					</PanelBody>
 					<PanelBody
 						title={ __( 'Spacing' ) }
@@ -207,7 +253,7 @@ registerBlockType( 'salient/block-salient-container', {
 								setAttributes( { paddingTop: value } );
 							} }
 							min={ 0 }
-							max={ 1000 }
+							max={ 200 }
 						/>
 						<RangeControl
 							label="Bottom Padding"
@@ -218,23 +264,28 @@ registerBlockType( 'salient/block-salient-container', {
 							min={ 0 }
 							max={ 1000 }
 						/>
-					</PanelBody>
-					<PanelBody title={ __( 'Text' ) } >
-						<ColorPalette
-							value={ textColor }
-							onChange={ ( newTextColor ) => setAttributes( { textColor: newTextColor } ) }
-							disableCustomColors={ true }
-						></ColorPalette>
+						<SelectControl
+							label="Spacing Units"
+							value={ paddingUnits }
+							options={ [
+								{ label: 'Pixels', value: 'px' },
+								{ label: 'Percent', value: '%' },
+								{ label: 'Viewport Height', value: 'vh' },
+							] }
+							onChange={ ( value ) => {
+								setAttributes( { paddingUnits: value } );
+							} }
+						/>
 					</PanelBody>
 				</InspectorControls>
 				<div
 					className={ className }
 					style={ {
-						backgroundImage: `${ backgroundImage ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
+						backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 						backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
 						backgroundPosition: `${ bgImagePosition ? bgImagePosition : 'center' }`,
-						paddingTop: `${ paddingTop ? ( paddingTop + 'px' ): 0 }`,
-						paddingBottom: `${ paddingBottom ? paddingBottom + 'px' : 0 }`,
+						paddingTop: `${ paddingTop ? ( paddingTop + 'px' ) : 0 }`,
+						paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
 						color: textColor,
 					} }
 				>
@@ -243,17 +294,25 @@ registerBlockType( 'salient/block-salient-container', {
 							template={ TEMPLATE }
 						/>
 					</div>
-					{ backgroundImage ? (
+					{ backgroundImage && (
 						<div
 							className="color-overlay"
 							style={ {
-								backgroundColor: `${ overlayBgColor ? overlayBgColor  : 'none' }`,
+								backgroundColor: `${ overlayBgColor ? overlayBgColor : 'none' }`,
 								opacity: `${ overlayOpacity ? ( overlayOpacity / 100 ) : '0' }`,
 							} }
 						></div>
-					) : '' }
+					) }
 
-					
+					{ bgMediaType === 'video' && backgroundImage && (
+						<video
+							className="salient-video-background"
+							autoPlay
+							muted
+							loop
+							src={ backgroundImage.url }
+						/>
+					) }
 				</div>
 			</Fragment>
 		);
@@ -274,10 +333,12 @@ registerBlockType( 'salient/block-salient-container', {
 		const {
 			paddingTop,
 			paddingBottom,
+			paddingUnits,
 			textColor,
 			backgroundColor,
 			backgroundImage,
 			bgImagePosition,
+			bgMediaType,
 			overlayBgColor,
 			overlayOpacity,
 		} = attributes;
@@ -287,11 +348,11 @@ registerBlockType( 'salient/block-salient-container', {
 			<div
 				className={ className }
 				style={ {
-					backgroundImage: `${ backgroundImage ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
+					backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 					backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
 					backgroundPosition: `${ bgImagePosition ? bgImagePosition : 'center' }`,
-					paddingTop: `${ paddingTop ? ( paddingTop + 'px' ): 0 }`,
-					paddingBottom: `${ paddingBottom ? paddingBottom + 'px' : 0 }`,
+					paddingTop: `${ paddingTop ? ( paddingTop + 'px' ) : 0 }`,
+					paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
 					color: textColor,
 				} }
 			>
@@ -302,11 +363,21 @@ registerBlockType( 'salient/block-salient-container', {
 					<div
 						className="color-overlay"
 						style={ {
-							backgroundColor: `${ overlayBgColor ? overlayBgColor  : 'none' }`,
+							backgroundColor: `${ overlayBgColor ? overlayBgColor : 'none' }`,
 							opacity: `${ overlayOpacity ? ( overlayOpacity / 100 ) : '0' }`,
 						} }
 					></div>
 				) : '' }
+
+				{ bgMediaType === 'video' && backgroundImage && (
+					<video
+						className="salient-video-background"
+						autoPlay
+						muted
+						loop
+						src={ backgroundImage.url }
+					/>
+				) }
 			</div>
 		);
 	},
