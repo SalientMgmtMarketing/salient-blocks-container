@@ -7,10 +7,38 @@
 .wp-block-salient-block-salient-container  {
   background-size: cover;
   position: relative;
+  display: flex;
 
   &.alignfull {
     margin-top: 0;
     margin-bottom: 0;
+  }
+  &.bg-fixed {
+    background-attachment: fixed;
+  }
+  &.vertical-align-top {
+    align-items: flex-start;
+  }
+  &.vertical-align-center {
+    align-items: center;
+  }
+  &.vertical-align-bottom {
+    align-items: flex-end;
+  }
+  &.has-xs-font-size {
+    font-size: .6em;
+  }
+  &.has-small-font-size {
+    font-size: .8em;
+  }
+  &.has-large-font-size {
+    font-size: 1.3em;
+  }
+  &.has-xl-font-size {
+    font-size: 1.6em;
+  }
+  &.has-xxl-font-size {
+    font-size: 2em;
   }
 
   .wrapper {
@@ -44,6 +72,10 @@
   * {
     position: relative;
     z-index: 10;
+  }
+
+  .wp-block-button__link {
+    font-size: 1em;
   }
 
   #breadcrumbs {

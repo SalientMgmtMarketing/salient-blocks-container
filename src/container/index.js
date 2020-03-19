@@ -10,7 +10,11 @@ import './editor.scss';
 import './style.scss';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType, createBlock } = wp.blocks; // Import registerBlockType() from wp.blocks
+const {
+	registerBlockType,
+	createBlock,
+} = wp.blocks;
+
 const {
 	MediaUpload,
 	InspectorControls,
@@ -18,12 +22,16 @@ const {
 	ContrastChecker,
 	InnerBlocks,
 } = wp.blockEditor;
+
 const {
 	Button,
 	PanelBody,
 	SelectControl,
 	RangeControl,
+	ToggleControl,
+	TextControl,
 } = wp.components;
+
 const { Fragment } = wp.element;
 
 /**
@@ -62,6 +70,17 @@ registerBlockType( 'salient/block-salient-container', {
 			type: 'string',
 			default: 'px',
 		},
+		minHeight: {
+			type: 'number',
+		},
+		heightUnits: {
+			type: 'string',
+			default: 'px',
+		},
+		verticalAlignment: {
+			type: 'string',
+			default: 'top',
+		},
 		backgroundColor: {
 			type: 'string',
 			default: '#333',
@@ -70,11 +89,19 @@ registerBlockType( 'salient/block-salient-container', {
 			type: 'string',
 			default: '#FFF',
 		},
-		backgroundImage: {
+		textSize: {
 			type: 'string',
+			default: 'normal',
+		},
+		backgroundImage: {
+			type: 'object',
 		},
 		bgImagePosition: {
 			type: 'string',
+		},
+		bgFixed: {
+			type: 'boolean',
+			default: false,
 		},
 		align: {
 			type: 'string',
@@ -117,9 +144,14 @@ registerBlockType( 'salient/block-salient-container', {
 			paddingTop,
 			paddingBottom,
 			paddingUnits,
+			minHeight,
+			heightUnits,
+			verticalAlignment,
 			textColor,
+			textSize,
 			backgroundColor,
 			backgroundImage,
+			bgFixed,
 			bgImagePosition,
 			bgMediaType,
 			overlayBgColor,
@@ -195,24 +227,36 @@ registerBlockType( 'salient/block-salient-container', {
 						) : '' }
 						{ backgroundImage ? (
 							<Fragment>
-								<SelectControl
-									label="Background Image Position"
-									value={ bgImagePosition }
-									options={ [
-										{ label: 'Centered', value: 'center' },
-										{ label: 'Center Top', value: 'center top' },
-										{ label: 'Center Bottom', value: 'center bottom' },
-										{ label: 'Left Top', value: 'left top' },
-										{ label: 'Left Center', value: 'left center' },
-										{ label: 'Left Bottom', value: 'left bottom' },
-										{ label: 'Right Top', value: 'right top' },
-										{ label: 'Right Center', value: 'right center' },
-										{ label: 'Right Bottom', value: 'right bottom' },
-									] }
-									onChange={ ( value ) => {
-										setAttributes( { bgImagePosition: value } );
-									} }
-								/>
+								{ bgMediaType === 'image' && (
+									<Fragment>
+										<ToggleControl
+											label="Fixed Background"
+											help={ bgFixed ? 'Has fixed background.' : 'No fixed background.' }
+											checked={ bgFixed }
+											onChange={
+												() => setAttributes( { bgFixed: ! bgFixed } )
+											}
+										/>
+										<SelectControl
+											label="Background Image Position"
+											value={ bgImagePosition }
+											options={ [
+												{ label: 'Centered', value: 'center' },
+												{ label: 'Center Top', value: 'center top' },
+												{ label: 'Center Bottom', value: 'center bottom' },
+												{ label: 'Left Top', value: 'left top' },
+												{ label: 'Left Center', value: 'left center' },
+												{ label: 'Left Bottom', value: 'left bottom' },
+												{ label: 'Right Top', value: 'right top' },
+												{ label: 'Right Center', value: 'right center' },
+												{ label: 'Right Bottom', value: 'right bottom' },
+											] }
+											onChange={ ( value ) => {
+												setAttributes( { bgImagePosition: value } );
+											} }
+										/>
+									</Fragment>
+								) }
 								<h3>Background Overlay</h3>
 								<ColorPalette
 									value={ overlayBgColor }
@@ -242,10 +286,54 @@ registerBlockType( 'salient/block-salient-container', {
 							textColor={ textColor }
 							isLargeText={ false }
 						/>
+						<SelectControl
+							label="Text Size"
+							value={ textSize }
+							options={ [
+								{ label: 'XS', value: 'xs' },
+								{ label: 'Small', value: 'small' },
+								{ label: 'Normal', value: 'normal' },
+								{ label: 'Large', value: 'large' },
+								{ label: 'XL', value: 'xl' },
+								{ label: 'XXL', value: 'xxl' },
+							] }
+							onChange={ ( value ) => {
+								setAttributes( { textSize: value } );
+							} }
+						/>
 					</PanelBody>
 					<PanelBody
 						title={ __( 'Spacing' ) }
 					>
+						<TextControl
+							label="Minimum Height"
+							value={ minHeight }
+							onChange={ ( value ) => setAttributes( { minHeight: value } ) }
+						/>
+						<SelectControl
+							label="Height Units"
+							value={ heightUnits }
+							options={ [
+								{ label: 'Pixels', value: 'px' },
+								{ label: 'Percent', value: '%' },
+								{ label: 'Viewport Height', value: 'vh' },
+							] }
+							onChange={ ( value ) => {
+								setAttributes( { heightUnits: value } );
+							} }
+						/>
+						<SelectControl
+							label="Vertical Alignment"
+							value={ verticalAlignment }
+							options={ [
+								{ label: 'Top', value: 'top' },
+								{ label: 'Center', value: 'center' },
+								{ label: 'Bottom', value: 'bottom' },
+							] }
+							onChange={ ( value ) => {
+								setAttributes( { verticalAlignment: value } );
+							} }
+						/>
 						<RangeControl
 							label="Top Padding"
 							value={ paddingTop }
@@ -262,7 +350,7 @@ registerBlockType( 'salient/block-salient-container', {
 								setAttributes( { paddingBottom: value } );
 							} }
 							min={ 0 }
-							max={ 1000 }
+							max={ 200 }
 						/>
 						<SelectControl
 							label="Spacing Units"
@@ -279,13 +367,14 @@ registerBlockType( 'salient/block-salient-container', {
 					</PanelBody>
 				</InspectorControls>
 				<div
-					className={ className }
+					className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' && ' has-' + textSize + '-font-size' }` }
 					style={ {
 						backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 						backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
 						backgroundPosition: `${ bgImagePosition ? bgImagePosition : 'center' }`,
-						paddingTop: `${ paddingTop ? ( paddingTop + 'px' ) : 0 }`,
+						paddingTop: `${ paddingTop ? ( paddingTop + paddingUnits ) : 0 }`,
 						paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
+						minHeight: `${ minHeight ? minHeight + heightUnits : 'auto' }`,
 						color: textColor,
 					} }
 				>
@@ -334,10 +423,15 @@ registerBlockType( 'salient/block-salient-container', {
 			paddingTop,
 			paddingBottom,
 			paddingUnits,
+			minHeight,
+			heightUnits,
+			verticalAlignment,
 			textColor,
+			textSize,
 			backgroundColor,
 			backgroundImage,
 			bgImagePosition,
+			bgFixed,
 			bgMediaType,
 			overlayBgColor,
 			overlayOpacity,
@@ -346,13 +440,14 @@ registerBlockType( 'salient/block-salient-container', {
 		// Creates a <p class='wp-block-cgb-block-salient-blocks-container'></p>.
 		return (
 			<div
-				className={ className }
+				className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' && ' has-' + textSize + '-font-size' }` }
 				style={ {
 					backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 					backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
 					backgroundPosition: `${ bgImagePosition ? bgImagePosition : 'center' }`,
-					paddingTop: `${ paddingTop ? ( paddingTop + 'px' ) : 0 }`,
+					paddingTop: `${ paddingTop ? ( paddingTop + paddingUnits ) : 0 }`,
 					paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
+					minHeight: `${ minHeight ? minHeight + heightUnits : 'auto' }`,
 					color: textColor,
 				} }
 			>
