@@ -13,6 +13,7 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+
   &.bg-fixed {
     background-attachment: fixed;
   }
@@ -47,6 +48,12 @@
     max-width: 1280px;
     margin: 0 auto;
   }
+  &.aligncenter .wrapper {
+    max-width: 720px;
+  }
+  &.alignwide .wrapper {
+    max-width: 1080px;
+  }
 
   .color-overlay {
     position: absolute;
@@ -54,7 +61,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1;
+    z-index: 2;
   }
 
   .salient-video-background {
@@ -72,6 +79,10 @@
   * {
     position: relative;
     z-index: 10;
+  }
+
+  .wp-block {
+    max-width: 1280px;
   }
 
   .wp-block-button__link {

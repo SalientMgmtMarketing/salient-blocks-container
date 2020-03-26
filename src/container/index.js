@@ -21,6 +21,8 @@ const {
 	ColorPalette,
 	ContrastChecker,
 	InnerBlocks,
+	BlockControls,
+	AlignmentToolbar,
 } = wp.blockEditor;
 
 const {
@@ -76,6 +78,10 @@ registerBlockType( 'salient/block-salient-container', {
 		heightUnits: {
 			type: 'string',
 			default: 'px',
+		},
+		textAlignment: {
+			type: 'string',
+			default: 'left',
 		},
 		verticalAlignment: {
 			type: 'string',
@@ -146,6 +152,7 @@ registerBlockType( 'salient/block-salient-container', {
 			paddingUnits,
 			minHeight,
 			heightUnits,
+			textAlignment,
 			verticalAlignment,
 			textColor,
 			textSize,
@@ -177,7 +184,6 @@ registerBlockType( 'salient/block-salient-container', {
 						<ColorPalette
 							value={ backgroundColor }
 							onChange={ ( newBgColor ) => setAttributes( { backgroundColor: newBgColor } ) }
-							disableCustomColors={ true }
 						></ColorPalette>
 						<ContrastChecker
 							backgroundColor={ backgroundColor }
@@ -261,7 +267,6 @@ registerBlockType( 'salient/block-salient-container', {
 								<ColorPalette
 									value={ overlayBgColor }
 									onChange={ ( newBgColor ) => setAttributes( { overlayBgColor: newBgColor } ) }
-									disableCustomColors={ true }
 								></ColorPalette>
 								<RangeControl
 									label="Opacity"
@@ -366,8 +371,14 @@ registerBlockType( 'salient/block-salient-container', {
 						/>
 					</PanelBody>
 				</InspectorControls>
+				<BlockControls>
+					<AlignmentToolbar
+						value={ textAlignment }
+						onChange={ ( value ) => setAttributes( { textAlignment: value } ) }
+					/>
+				</BlockControls>
 				<div
-					className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' && ' has-' + textSize + '-font-size' }` }
+					className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' ? ' has-' + textSize + '-font-size' : '' }` }
 					style={ {
 						backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 						backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
@@ -376,6 +387,7 @@ registerBlockType( 'salient/block-salient-container', {
 						paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
 						minHeight: `${ minHeight ? minHeight + heightUnits : 'auto' }`,
 						color: textColor,
+						textAlign: textAlignment,
 					} }
 				>
 					<div className="wrapper">
@@ -425,6 +437,7 @@ registerBlockType( 'salient/block-salient-container', {
 			paddingUnits,
 			minHeight,
 			heightUnits,
+			textAlignment,
 			verticalAlignment,
 			textColor,
 			textSize,
@@ -440,7 +453,7 @@ registerBlockType( 'salient/block-salient-container', {
 		// Creates a <p class='wp-block-cgb-block-salient-blocks-container'></p>.
 		return (
 			<div
-				className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' && ' has-' + textSize + '-font-size' }` }
+				className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' ? ' has-' + textSize + '-font-size' : '' }` }
 				style={ {
 					backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 					backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
@@ -449,6 +462,7 @@ registerBlockType( 'salient/block-salient-container', {
 					paddingBottom: `${ paddingBottom ? paddingBottom + paddingUnits : 0 }`,
 					minHeight: `${ minHeight ? minHeight + heightUnits : 'auto' }`,
 					color: textColor,
+					textAlign: textAlignment,
 				} }
 			>
 				<div className="wrapper">
