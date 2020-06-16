@@ -313,7 +313,8 @@ registerBlockType( 'salient/block-salient-container', {
 						<TextControl
 							label="Minimum Height"
 							value={ minHeight }
-							onChange={ ( value ) => setAttributes( { minHeight: value } ) }
+							type="number"
+							onChange={ ( value ) => setAttributes( { minHeight: parseInt( value ) } ) }
 						/>
 						<SelectControl
 							label="Height Units"
@@ -343,7 +344,7 @@ registerBlockType( 'salient/block-salient-container', {
 							label="Top Padding"
 							value={ paddingTop }
 							onChange={ ( value ) => {
-								setAttributes( { paddingTop: value } );
+								setAttributes( { paddingTop: parseInt( value ) } );
 							} }
 							min={ 0 }
 							max={ 200 }
@@ -352,7 +353,7 @@ registerBlockType( 'salient/block-salient-container', {
 							label="Bottom Padding"
 							value={ paddingBottom }
 							onChange={ ( value ) => {
-								setAttributes( { paddingBottom: value } );
+								setAttributes( { paddingBottom: parseInt( value ) } );
 							} }
 							min={ 0 }
 							max={ 200 }

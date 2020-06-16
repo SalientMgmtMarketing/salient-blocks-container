@@ -5,7 +5,7 @@
  * Description: salient-blocks-container — is a Gutenberg plugin created via create-guten-block.
  * Author: Paul Stonier
  * Author URI: https://www.salient.com/
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  *
@@ -32,7 +32,8 @@ add_filter(
 			array(
 				array(
 					'slug'  => 'salient',
-					'title' => __( 'Salient', 'salient-blocks' ),
+					'title' => __( 'Salient Custom Blocks', 'salient-blocks' ),
+					'icon'  => '',
 				),
 			)
 		);

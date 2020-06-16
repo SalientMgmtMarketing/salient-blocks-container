@@ -1,1 +1,80 @@
-.wp-block-salient-block-salient-container{background-size:cover;position:relative;display:-ms-flexbox;display:flex}.wp-block-salient-block-salient-container.alignfull{margin-top:0;margin-bottom:0}.wp-block-salient-block-salient-container.bg-fixed{background-attachment:fixed}.wp-block-salient-block-salient-container.vertical-align-top{-ms-flex-align:start;align-items:flex-start}.wp-block-salient-block-salient-container.vertical-align-center{-ms-flex-align:center;align-items:center}.wp-block-salient-block-salient-container.vertical-align-bottom{-ms-flex-align:end;align-items:flex-end}.wp-block-salient-block-salient-container.has-xs-font-size{font-size:.6em}.wp-block-salient-block-salient-container.has-small-font-size{font-size:.8em}.wp-block-salient-block-salient-container.has-large-font-size{font-size:1.3em}.wp-block-salient-block-salient-container.has-xl-font-size{font-size:1.6em}.wp-block-salient-block-salient-container.has-xxl-font-size{font-size:2em}.wp-block-salient-block-salient-container .wrapper{display:block;width:100%;max-width:1280px;margin:0 auto}.wp-block-salient-block-salient-container.aligncenter .wrapper{max-width:720px}.wp-block-salient-block-salient-container.alignwide .wrapper{max-width:1080px}.wp-block-salient-block-salient-container .color-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:2}.wp-block-salient-block-salient-container .salient-video-background{position:absolute;top:50%;left:50%;-webkit-transform:translateX(-50%) translateY(-50%);-ms-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);width:100%;height:100%;z-index:1;-o-object-fit:cover;object-fit:cover}.wp-block-salient-block-salient-container *{position:relative;z-index:10}.wp-block-salient-block-salient-container .wp-block{max-width:1280px}.wp-block-salient-block-salient-container .wp-block-button__link{font-size:1em}.wp-block-salient-block-salient-container #breadcrumbs{font-size:.7em;padding-bottom:1em;z-index:5;position:relative}
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+.wp-block-salient-block-salient-container {
+  background-size: cover;
+  position: relative;
+  display: -ms-flexbox;
+  display: flex; }
+  .wp-block-salient-block-salient-container.alignfull {
+    margin-top: 0;
+    margin-bottom: 0; }
+  .wp-block-salient-block-salient-container.bg-fixed {
+    background-attachment: fixed; }
+  .wp-block-salient-block-salient-container.vertical-align-top {
+    -ms-flex-align: start;
+        align-items: flex-start; }
+  .wp-block-salient-block-salient-container.vertical-align-center {
+    -ms-flex-align: center;
+        align-items: center; }
+  .wp-block-salient-block-salient-container.vertical-align-bottom {
+    -ms-flex-align: end;
+        align-items: flex-end; }
+  .wp-block-salient-block-salient-container.has-xs-font-size {
+    font-size: .6em; }
+  .wp-block-salient-block-salient-container.has-small-font-size {
+    font-size: .8em; }
+  .wp-block-salient-block-salient-container.has-large-font-size {
+    font-size: 1.3em; }
+  .wp-block-salient-block-salient-container.has-xl-font-size {
+    font-size: 1.6em; }
+  .wp-block-salient-block-salient-container.has-xxl-font-size {
+    font-size: 2em; }
+  .wp-block-salient-block-salient-container .wrapper {
+    display: block;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto; }
+  .wp-block-salient-block-salient-container.aligncenter .wrapper {
+    max-width: 720px; }
+  .wp-block-salient-block-salient-container.alignwide .wrapper {
+    max-width: 1080px; }
+  .wp-block-salient-block-salient-container .color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2; }
+  .wp-block-salient-block-salient-container .salient-video-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    -o-object-fit: cover;
+    object-fit: cover; }
+  .wp-block-salient-block-salient-container * {
+    position: relative;
+    z-index: 10; }
+  .wp-block-salient-block-salient-container .wp-block {
+    max-width: 1280px; }
+  .wp-block-salient-block-salient-container .wp-block-button__link {
+    font-size: 1em; }
+  .wp-block-salient-block-salient-container #breadcrumbs {
+    font-size: .7em;
+    padding-bottom: 1em;
+    z-index: 5;
+    position: relative; }
