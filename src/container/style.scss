@@ -4,10 +4,15 @@
  * CSS for both Frontend+Backend.
  */
 
-.wp-block-salient-block-salient-container  {
+.wp-block-salient-block-salient-container {
   background-size: cover;
   position: relative;
   display: flex;
+
+  .wp-block-column & {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
 
   &.alignfull {
     margin-top: 0;
@@ -95,5 +100,9 @@
     padding-bottom: 1em;
     z-index: 5;
     position: relative;
+  }
+
+  ul {
+    text-align: left;
   }
 }
