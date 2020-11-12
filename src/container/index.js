@@ -454,7 +454,7 @@ registerBlockType( 'salient/block-salient-container', {
 		// Creates a <p class='wp-block-cgb-block-salient-blocks-container'></p>.
 		return (
 			<div
-				className={ `${ className }${ bgFixed ? ' bg-fixed' : '' }${ verticalAlignment ? ' vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' ? ' has-' + textSize + '-font-size' : '' }` }
+				className={ `${ bgFixed ? 'bg-fixed ' : '' }${ verticalAlignment ? 'vertical-align-' + verticalAlignment : '' }${ textSize !== 'normal' ? ' has-' + textSize + '-font-size' : '' }` }
 				style={ {
 					backgroundImage: `${ backgroundImage && bgMediaType === 'image' ? ( `url( ${ backgroundImage.url } )` ) : ( 'none' ) }`,
 					backgroundColor: `${ backgroundColor ? ( backgroundColor ) : ( 'none' ) }`,
