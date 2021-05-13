@@ -14,6 +14,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Add Salient Block Category
+ *
+ * @param array   $categories list of block categories
+ * @param string  $post Post ID
+ * @return array
+ */
+function add_salient_block_category( $categories, $post ) {
+	$new_categories = array_merge(
+		$categories,
+		array(
+			array(
+				'slug'  => 'salient',
+				'title' => __( 'Salient Custom Blocks', 'salient-blocks' ),
+				'icon'  => '',
+			),
+		)
+	);
+
+	$filtered_categories = array_unique( $new_categories, SORT_REGULAR );
+	return $filtered_categories;
+}
+
+// Add Custom Block Category.
+add_filter( 'block_categories', 'add_salient_block_category', 10, 2 );
+
+/**
  * Enqueue Gutenberg block assets for both frontend + backend.
  *
  * Assets enqueued:
@@ -57,11 +83,11 @@ function salient_blocks_container_cgb_block_assets() { // phpcs:ignore
 	wp_localize_script(
 		'salient_blocks_container-cgb-block-js',
 		'cgbGlobal', // Array containing dynamic data for a JS Global.
-		[
+		array(
 			'pluginDirPath' => plugin_dir_path( __DIR__ ),
 			'pluginDirUrl'  => plugin_dir_url( __DIR__ ),
 			// Add more data here that you want to access from `cgbGlobal` object.
-		]
+		)
 	);
 
 	/**
@@ -75,7 +101,8 @@ function salient_blocks_container_cgb_block_assets() { // phpcs:ignore
 	 * @since 1.16.0
 	 */
 	register_block_type(
-		'cgb/block-salient-blocks-container', array(
+		'salient/block-salient-blocks-container',
+		array(
 			// Enqueue blocks.style.build.css on both frontend & backend.
 			'style'         => 'salient_blocks_container-cgb-style-css',
 			// Enqueue blocks.build.js in the editor only.

@@ -21,28 +21,3 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Block Initializer.
  */
 require_once plugin_dir_path( __FILE__ ) . 'src/init.php';
-
-// Add Custom Block Category.
-add_filter(
-	'block_categories',
-	function ( $categories, $post ) {
-
-		$new_categories = array_merge(
-			$categories,
-			array(
-				array(
-					'slug'  => 'salient',
-					'title' => __( 'Salient Custom Blocks', 'salient-blocks' ),
-					'icon'  => '',
-				),
-			)
-		);
-
-		$filtered_categories = array_unique( $new_categories, SORT_REGULAR );
-
-		return $filtered_categories;
-
-	},
-	10,
-	2
-);
